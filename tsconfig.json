@@ -51,6 +51,11 @@
     "node_modules",
     ".next",
     "out",
-    "dist"
+    "dist",
+    "hardhat.config.ts",
+    "scripts/**/*",
+    "test/**/*",
+    "typechain-types/**/*",
+    "contracts/**/*.ts"
   ]
 }
