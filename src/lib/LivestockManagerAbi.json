@@ -1,0 +1,666 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AccessControlBadConfirmation",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
+      { "internalType": "bytes32", "name": "neededRole", "type": "bytes32" }
+    ],
+    "name": "AccessControlUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "target", "type": "address" }
+    ],
+    "name": "AddressEmptyCode",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "implementation", "type": "address" }
+    ],
+    "name": "ERC1967InvalidImplementation",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ERC1967NonPayable",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "EnforcedPause",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ExpectedPause",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FailedCall",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidInitialization",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotInitializing",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "UUPSUnauthorizedCallContext",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "slot", "type": "bytes32" }
+    ],
+    "name": "UUPSUnsupportedProxiableUUID",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "name": "FundsClaimed",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "uint64", "name": "version", "type": "uint64" }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "listingId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "investor", "type": "address" },
+      { "indexed": false, "internalType": "uint256", "name": "numberOfShares", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "totalCost", "type": "uint256" }
+    ],
+    "name": "InvestmentMade",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "listingId", "type": "uint256" },
+      { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+    ],
+    "name": "ListingCreated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "uint256", "name": "listingId", "type": "uint256" },
+      { "indexed": true, "internalType": "address", "name": "auditor", "type": "address" }
+    ],
+    "name": "ListingVerified",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "indexed": true, "internalType": "bytes32", "name": "previousAdminRole", "type": "bytes32" },
+      { "indexed": true, "internalType": "bytes32", "name": "newAdminRole", "type": "bytes32" }
+    ],
+    "name": "RoleAdminChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "indexed": true, "internalType": "address", "name": "admin", "type": "address" }
+    ],
+    "name": "RoleApproved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }
+    ],
+    "name": "RoleGranted",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" }
+    ],
+    "name": "RoleRequested",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "indexed": true, "internalType": "address", "name": "account", "type": "address" },
+      { "indexed": true, "internalType": "address", "name": "sender", "type": "address" }
+    ],
+    "name": "RoleRevoked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": false, "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      { "indexed": true, "internalType": "address", "name": "implementation", "type": "address" }
+    ],
+    "name": "Upgraded",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "AUDITOR_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "DEFAULT_ADMIN_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "FARMER_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "INVESTOR_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "PLATFORM_ADMIN_ROLE",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "UPGRADE_INTERFACE_VERSION",
+    "outputs": [
+      { "internalType": "string", "name": "", "type": "string" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "acceptedStablecoin",
+    "outputs": [
+      { "internalType": "contract IERC20", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_user", "type": "address" },
+      { "internalType": "bytes32", "name": "_role", "type": "bytes32" },
+      { "internalType": "uint256", "name": "_requestIndex", "type": "uint256" }
+    ],
+    "name": "approveRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimFunds",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_totalShares", "type": "uint256" },
+      { "internalType": "uint256", "name": "_pricePerShare", "type": "uint256" },
+      { "internalType": "string", "name": "_category", "type": "string" },
+      { "internalType": "string", "name": "_livestockType", "type": "string" },
+      {
+        "components": [
+          { "internalType": "string", "name": "healthStatus", "type": "string" },
+          { "internalType": "uint256", "name": "age", "type": "uint256" },
+          { "internalType": "uint256", "name": "lastVaccinationDate", "type": "uint256" },
+          { "internalType": "string", "name": "insuranceId", "type": "string" }
+        ],
+        "internalType": "struct LivestockManager.LivestockDetails",
+        "name": "_details",
+        "type": "tuple"
+      }
+    ],
+    "name": "createListing",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getAllListings",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+          { "internalType": "address", "name": "owner", "type": "address" },
+          { "internalType": "uint256", "name": "totalShares", "type": "uint256" },
+          { "internalType": "uint256", "name": "availableShares", "type": "uint256" },
+          { "internalType": "uint256", "name": "pricePerShare", "type": "uint256" },
+          { "internalType": "string", "name": "category", "type": "string" },
+          { "internalType": "string", "name": "livestockType", "type": "string" },
+          {
+            "components": [
+              { "internalType": "string", "name": "healthStatus", "type": "string" },
+              { "internalType": "uint256", "name": "age", "type": "uint256" },
+              { "internalType": "uint256", "name": "lastVaccinationDate", "type": "uint256" },
+              { "internalType": "string", "name": "insuranceId", "type": "string" }
+            ],
+            "internalType": "struct LivestockManager.LivestockDetails",
+            "name": "details",
+            "type": "tuple"
+          },
+          { "internalType": "bool", "name": "isVerified", "type": "bool" },
+          { "internalType": "bool", "name": "isActive", "type": "bool" },
+          { "internalType": "uint256", "name": "createdAt", "type": "uint256" }
+        ],
+        "internalType": "struct LivestockManager.Listing[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMyFarmerListings",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+          { "internalType": "address", "name": "owner", "type": "address" },
+          { "internalType": "uint256", "name": "totalShares", "type": "uint256" },
+          { "internalType": "uint256", "name": "availableShares", "type": "uint256" },
+          { "internalType": "uint256", "name": "pricePerShare", "type": "uint256" },
+          { "internalType": "string", "name": "category", "type": "string" },
+          { "internalType": "string", "name": "livestockType", "type": "string" },
+          {
+            "components": [
+              { "internalType": "string", "name": "healthStatus", "type": "string" },
+              { "internalType": "uint256", "name": "age", "type": "uint256" },
+              { "internalType": "uint256", "name": "lastVaccinationDate", "type": "uint256" },
+              { "internalType": "string", "name": "insuranceId", "type": "string" }
+            ],
+            "internalType": "struct LivestockManager.LivestockDetails",
+            "name": "details",
+            "type": "tuple"
+          },
+          { "internalType": "bool", "name": "isVerified", "type": "bool" },
+          { "internalType": "bool", "name": "isActive", "type": "bool" },
+          { "internalType": "uint256", "name": "createdAt", "type": "uint256" }
+        ],
+        "internalType": "struct LivestockManager.Listing[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMyInvestments",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "listingId", "type": "uint256" },
+          { "internalType": "uint256", "name": "sharesOwned", "type": "uint256" }
+        ],
+        "internalType": "struct LivestockManager.Investment[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getPendingRoleRequests",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "address", "name": "user", "type": "address" },
+          { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+          { "internalType": "bool", "name": "pending", "type": "bool" }
+        ],
+        "internalType": "struct LivestockManager.RoleRequest[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" }
+    ],
+    "name": "getRoleAdmin",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "grantRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "hasRequestedRole",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "hasRole",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_admin", "type": "address" },
+      { "internalType": "address", "name": "_livestockAssetNFT", "type": "address" },
+      { "internalType": "address", "name": "_acceptedStablecoin", "type": "address" }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_listingId", "type": "uint256" },
+      { "internalType": "uint256", "name": "_numberOfShares", "type": "uint256" }
+    ],
+    "name": "invest",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "investmentShares",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "listingCounter",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "listings",
+    "outputs": [
+      { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+      { "internalType": "address", "name": "owner", "type": "address" },
+      { "internalType": "uint256", "name": "totalShares", "type": "uint256" },
+      { "internalType": "uint256", "name": "availableShares", "type": "uint256" },
+      { "internalType": "uint256", "name": "pricePerShare", "type": "uint256" },
+      { "internalType": "string", "name": "category", "type": "string" },
+      { "internalType": "string", "name": "livestockType", "type": "string" },
+      {
+        "components": [
+          { "internalType": "string", "name": "healthStatus", "type": "string" },
+          { "internalType": "uint256", "name": "age", "type": "uint256" },
+          { "internalType": "uint256", "name": "lastVaccinationDate", "type": "uint256" },
+          { "internalType": "string", "name": "insuranceId", "type": "string" }
+        ],
+        "internalType": "struct LivestockManager.LivestockDetails",
+        "name": "details",
+        "type": "tuple"
+      },
+      { "internalType": "bool", "name": "isVerified", "type": "bool" },
+      { "internalType": "bool", "name": "isActive", "type": "bool" },
+      { "internalType": "uint256", "name": "createdAt", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "livestockAssetNFT",
+    "outputs": [
+      { "internalType": "contract ILivestockAssetNFT", "name": "", "type": "address" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" }
+    ],
+    "name": "pendingWithdrawals",
+    "outputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "proxiableUUID",
+    "outputs": [
+      { "internalType": "bytes32", "name": "", "type": "bytes32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "callerConfirmation", "type": "address" }
+    ],
+    "name": "renounceRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_role", "type": "bytes32" }
+    ],
+    "name": "requestRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "address", "name": "account", "type": "address" }
+    ],
+    "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "roleRequests",
+    "outputs": [
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "bytes32", "name": "role", "type": "bytes32" },
+      { "internalType": "bool", "name": "pending", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+    ],
+    "name": "supportsInterface",
+    "outputs": [
+      { "internalType": "bool", "name": "", "type": "bool" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "newImplementation", "type": "address" },
+      { "internalType": "bytes", "name": "data", "type": "bytes" }
+    ],
+    "name": "upgradeToAndCall",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" }
+    ],
+    "name": "userInvestments",
+    "outputs": [
+      { "internalType": "uint256", "name": "listingId", "type": "uint256" },
+      { "internalType": "uint256", "name": "sharesOwned", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_listingId", "type": "uint256" }
+    ],
+    "name": "verifyListing",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -1,0 +1,8 @@
+.env
+.next
+node_modules/
+.env.local
+
+=9.1.0 chai@^4.2.0 hardhat-gas-reporter@^2.3.0 solidity-coverage@^0.8.1
+
+core.*

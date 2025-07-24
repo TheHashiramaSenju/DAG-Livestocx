@@ -1,0 +1,76 @@
+{
+  "name": "livestocx-dapp-final",
+  "version": "1.0.0",
+  "description": "Agricultural Asset Tokenization Platform on BlockDAG",
+  "private": true,
+  "keywords": [
+    "blockchain",
+    "agriculture",
+    "defi",
+    "tokenization",
+    "wagmi",
+    "blockdag"
+  ],
+  "author": "LivestocX Team",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out dist",
+    "analyze": "ANALYZE=true npm run build"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.40.1",
+    "@types/three": "^0.178.1",
+    "@web3modal/wagmi": "^4.2.3",
+    "autoprefixer": "^10.4.19",
+    "buffer": "^6.0.3",
+    "chart.js": "^4.5.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.0.24",
+    "gsap": "^3.13.0",
+    "next": "14.2.3",
+    "pino-pretty": "^13.0.0",
+    "postcss": "^8.4.38",
+    "process": "^0.11.10",
+    "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "tailwindcss": "^3.4.1",
+    "three": "^0.178.0",
+    "typescript": "^5.4.5",
+    "viem": "^2.7.13",
+    "wagmi": "^2.5.7"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.3",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.23",
+    "cross-env": "^7.0.3",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
