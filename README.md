@@ -1,19 +1,19 @@
 # 🎯 About our Mission
 
-## LivestocX 🌾 | Revolutionizing Agriculture Through BlockDAG Technology
+## LivestocX 🌾 | Revolutionizing LiveStocks Trade Through BlockDAG Technology
 
 ***
 
 ### 🌟 Project Overview
 
-**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes agricultural finance by enabling farmers to tokenize their livestock, crops, and agricultural assets, while connecting them with global investors seeking exposure to the agricultural sector.
+**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes livestocks finance by enabling farmers to tokenize their livestock, crops, and livestock assets, while connecting them with global investors seeking exposure to the livestock sector.
 
-Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in agricultural financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in agriculture.
+Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in livestok financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in livestock.
 
 #### Core Purpose
 
-* **Democratize Agricultural Investment** - Make agriculture accessible to global investors
-* **Empower Farmers** - Provide instant liquidity for agricultural assets
+* **Democratize Livestok Investment** - Make Livestock accessible to global investors
+* **Empower Farmers** - Provide instant liquidity for Livestock assets
 * **Ensure Transparency** - BlocDAG-based verification and tracking
 * **Create Economic Inclusion** - Bridge rural farmers with urban capital
 
