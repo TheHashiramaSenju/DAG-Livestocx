@@ -8,7 +8,7 @@ const nextConfig = {
     optimizePackageImports: ['gsap', 'three', 'chart.js'],
     esmExternals: 'loose' // Helps with WalletConnect ESM issues : Added by @Darshan
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -51,7 +51,21 @@ const nextConfig = {
 
     // ADDED: Externalize problematic packages during SSR by @vigneshhk
     if (isServer) {
+      config.externals = config.externals || [];
       config.externals.push('pino-pretty', 'encoding', '@walletconnect/keyvaluestorage');
+      
+      // ADDED: Exclude Hardhat from production builds to fix Vercel deployment
+      if (!dev) {
+        config.externals.push(
+          'hardhat',
+          'hardhat/config',
+          '@nomicfoundation/hardhat-toolbox',
+          '@openzeppelin/hardhat-upgrades',
+          '@nomiclabs/hardhat-ethers',
+          'hardhat-gas-reporter',
+          'solidity-coverage'
+        );
+      }
     }
 
     return config;
@@ -95,5 +109,4 @@ const nextConfig = {
     ];
   },
 };
-
 module.exports = nextConfig;
