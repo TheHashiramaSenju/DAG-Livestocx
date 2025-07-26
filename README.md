@@ -4,14 +4,14 @@
 
 ![Built on BlockDAG](https://img.shields.io/badge/Built%20on-BlockDAG-blue.svg?style=for-the-badge\&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMEMyOC43IDAgMCAyOC43IDAgNjRzMjguNyA2NCA2NCA2NCA2NC0yOC43IDY0LTY0UzEwMC4zIDAgNjQgMHptMCAxMTguNkMyNC4zIDExOC42IDkuNCAxMDMuNyA5LjQgNjRTMjQuMyA5LjQgNjQgOS40czU0LjYgMTQuOSA1NC42IDU0LjYtNDQuOSA1NC42LTU0LjYgNTQuNnoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMTUuN2MtMjYuNyAwLTQ4LjMgMjEuNi00OC4zIDQ4LjNzMjEuNiA0OC4zIDQ4LjMgNDguMyA0OC4zLTIxLjYgNDguMy00OC4zLTIxLjYtNDguMy00OC4zLTQ4LjN6bTAgODQuOWMtMjAuMiAwLTM2LjYtMTYuNC0zNi46LTM2LjZzMTYuNC0zNi42IDM2LjYtMzYuNiAzNi42IDE2LjQgMzYuNiAzNi42LTE2LjQgMzYuNi0zNi42IDM2LjZ6Ii8+PC9zdmc+) ![License MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge) ![Version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blueviolet.svg?style=for-the-badge)
 
-\
+
 
 
 **The World's First Decentralized Agricultural Asset Tokenization Platform**
 
 _Empowering farmers, connecting investors, transforming agriculture_
 
-[🚀 **Live Demo**](https://livestocx-demo.vercel.app) | [📖 **Documentation**](https://docs.livestocx.com) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
+[🚀 **Live Demo**](https://livestocx-demo.vercel.app) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
 
 ***
 
