@@ -1,15 +1,12 @@
 # About Us
 
-## LivestocX 🌾 | Revolutionizing Agriculture Through Blockchain
+## LivestocX 🌾 | Revolutionizing Livestock Through Blockchain
 
 ![Built on BlockDAG](https://img.shields.io/badge/Built%20on-BlockDAG-blue.svg?style=for-the-badge\&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMEMyOC43IDAgMCAyOC43IDAgNjRzMjguNyA2NCA2NCA2NCA2NC0yOC43IDY0LTY0UzEwMC4zIDAgNjQgMHptMCAxMTguNkMyNC4zIDExOC42IDkuNCAxMDMuNyA5LjQgNjRTMjQuMyA5LjQgNjQgOS40czU0LjYgMTQuOSA1NC42IDU0LjYtNDQuOSA1NC42LTU0LjYgNTQuNnoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMTUuN2MtMjYuNyAwLTQ4LjMgMjEuNi00OC4zIDQ4LjNzMjEuNiA0OC4zIDQ4LjMgNDguMyA0OC4zLTIxLjYgNDguMy00OC4zLTIxLjYtNDguMy00OC4zLTQ4LjN6bTAgODQuOWMtMjAuMiAwLTM2LjYtMTYuNC0zNi46LTM2LjZzMTYuNC0zNi42IDM2LjYtMzYuNiAzNi42IDE2LjQgMzYuNiAzNi42LTE2LjQgMzYuNi0zNi42IDM2LjZ6Ii8+PC9zdmc+) ![License MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge) ![Version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blueviolet.svg?style=for-the-badge)
 
+**The World's First Decentralized LiveStock Asset Tokenization Platform**
 
-
-
-**The World's First Decentralized Agricultural Asset Tokenization Platform**
-
-_Empowering farmers, connecting investors, transforming agriculture_
+_Empowering farmers, connecting investors, transforming Livestock Financing_
 
 [🚀 **Live Demo**](https://livestocx-demo.vercel.app) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
 
@@ -17,14 +14,14 @@ _Empowering farmers, connecting investors, transforming agriculture_
 
 ### 🌟 Project Overview
 
-**LivestocX** is a groundbreaking blockchain-based platform that revolutionizes agricultural finance by enabling farmers to tokenize their livestock, crops, and agricultural assets, while connecting them with global investors seeking exposure to the agricultural sector.
+**LivestocX** is a groundbreaking blockchain-based platform that revolutionizes Livestock asset finance by enabling farmers to tokenize their livestock, crops, and Livestock assets, while connecting them with global investors seeking exposure to the agricultural sector.
 
-Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in agricultural financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in agriculture.
+Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in Livestock financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in Livestock Assets.
 
 #### 🎯 Core Purpose
 
-* **Democratize Agricultural Investment** - Make agriculture accessible to global investors
-* **Empower Farmers** - Provide instant liquidity for agricultural assets
+* **Democratize Livestock Asset Investment** - Make Livestock accessible to global investors
+* **Empower Farmers** - Provide instant liquidity for Livestock assets
 * **Ensure Transparency** - Blockchain-based verification and tracking
 * **Create Economic Inclusion** - Bridge rural farmers with urban capital
 
@@ -132,7 +129,7 @@ copies or substantial portions of the Software.
 
 #### Real-World Impact
 
-* **Addresses $2.5 trillion agricultural financing gap globally**
+* **Addresses $2.5 trillion Livestock financing gap globally**
 * **Enables financial inclusion for 570M smallholder farmers worldwide**
 * **Creates a new asset class for institutional investors**
 
