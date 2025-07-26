@@ -2,13 +2,13 @@
 
 ### 📊 BlockDAG Network Stats (Primordial Testnet)
 
-| Metric                     | Current Value           | Status      |
-| -------------------------- | ----------------------- | ----------- |
-| **Transactions/Sec (TPS)** | `~15,000`               | `Stable`    |
-| **Confirmation Time**      | `~1.5 seconds`          | `Optimal`   |
-| **Average Gas Fee**        | `0.0001 BDAG` (\~$0.02) | `Low`       |
-| **Active Nodes**           | `1,250+`                | `Healthy`   |
-| **Network Uptime**         | `99.98%`                | `Excellent` |
+| Metric                     | Current Value  | Status      |
+| -------------------------- | -------------- | ----------- |
+| **Transactions/Sec (TPS)** | `~15,000`      | `Stable`    |
+| **Confirmation Time**      | `~1.5 seconds` | `Optimal`   |
+| **Average Gas Fee**        | `0.0001 BDAG`  | `Low`       |
+| **Active Nodes**           | `1,250+`       | `Healthy`   |
+| **Network Uptime**         | `99.98%`       | `Excellent` |
 
 ### 🔗 Chain Configuration
 
