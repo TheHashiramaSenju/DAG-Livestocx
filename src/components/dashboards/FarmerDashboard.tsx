@@ -38,11 +38,15 @@ export default function FarmerDashboard({ onExit, onRoleSwitch }: FarmerDashboar
   const [activePanel, setActivePanel] = useState<'create' | 'listings' | 'withdraw'>('create');
 
   // Wagmi hooks for contract interaction
-  const { writeContract, data: hash, isLoading: isPending, error } = useWriteContract();
+  const { writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
   // Cross-dashboard data hook for assets and refresh
-  const { assets, refreshData } = useCrossDashboardData();
+  const { assets = [], refreshData } = useCrossDashboardData() as { 
+  assets: Asset[]; 
+  refreshData: () => void 
+};
+
 
   // Local form state for create asset
   const [assetForm, setAssetForm] = useState({
@@ -108,8 +112,10 @@ export default function FarmerDashboard({ onExit, onRoleSwitch }: FarmerDashboar
         status: 'pending',
         isVerified: false,
         createdAt: new Date().toISOString(),
-        txHash: hash,
+        ...(hash && { txHash: hash }), 
       };
+
+
       localStorage.setItem('userAssets', JSON.stringify([...existingAssets, newAsset]));
       refreshData();
 
@@ -171,11 +177,20 @@ export default function FarmerDashboard({ onExit, onRoleSwitch }: FarmerDashboar
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center text-white">
           <h2 className="text-3xl font-bold mb-4">Connect Wallet for Farmer Access</h2>
-          <w3m-button />
+          <button 
+            onClick={() => {
+              toast.error('Please install MetaMask and connect your wallet');
+            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-xl transition-colors"
+            type="button"
+          >
+            Connect Wallet
+          </button>
         </div>
       </div>
     );
   }
+
 
   return (
     <div className="min-h-screen bg-slate-900 flex">

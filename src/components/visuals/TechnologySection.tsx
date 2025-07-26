@@ -32,8 +32,13 @@ export default function TechnologySection() {
     const edges: { from: DagNode; to: DagNode }[] = [];
 
     class DagNodeImpl implements DagNode {
-      x: number; y: number; vx: number; vy: number; radius: number; alpha: number;
-      
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+      alpha: number;
+
       constructor() {
         this.x = width - 20;
         this.y = Math.random() * height;
@@ -62,7 +67,10 @@ export default function TechnologySection() {
       if (nodes.length > 60) return;
       const newNode = new DagNodeImpl();
       if (nodes.length > 1) {
-        const targets = nodes.filter(n => n.x > newNode.x - 300).sort(() => 0.5 - Math.random()).slice(0, 2);
+        const targets = nodes
+          .filter(n => n.x > newNode.x - 300)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 2);
         targets.forEach(target => edges.push({ from: newNode, to: target }));
       }
       nodes.push(newNode);
@@ -77,28 +85,29 @@ export default function TechnologySection() {
         lastTime = currentTime;
       }
 
-      ctx.clearRect(0, 0, width, height);
-      
+      ctx!.clearRect(0, 0, width, height);
+
       edges.forEach(edge => {
-        ctx.beginPath();
-        ctx.moveTo(edge.from.x, edge.from.y);
-        ctx.lineTo(edge.to.x, edge.to.y);
-        ctx.strokeStyle = `rgba(34, 197, 94, ${Math.min(edge.from.alpha, edge.to.alpha) * 0.3})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        ctx!.beginPath();
+        ctx!.moveTo(edge.from.x, edge.from.y);
+        ctx!.lineTo(edge.to.x, edge.to.y);
+        ctx!.strokeStyle = `rgba(34, 197, 94, ${Math.min(edge.from.alpha, edge.to.alpha) * 0.3})`;
+        ctx!.lineWidth = 1;
+        ctx!.stroke();
       });
 
       nodes.forEach(node => {
         node.update();
-        node.draw(ctx);
+        node.draw(ctx!);
       });
 
-      // Remove old nodes
+      // Remove old nodes and their associated edges, with undefined check on edges[i]
       nodes.filter(node => node.x < -50).forEach(node => {
         const nodeIndex = nodes.indexOf(node);
-        nodes.splice(nodeIndex, 1);
+        if (nodeIndex !== -1) nodes.splice(nodeIndex, 1);
         for (let i = edges.length - 1; i >= 0; i--) {
-          if (edges[i].from === node || edges[i].to === node) {
+          const edge = edges[i];
+          if (edge && (edge.from === node || edge.to === node)) {
             edges.splice(i, 1);
           }
         }

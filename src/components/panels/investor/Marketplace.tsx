@@ -1,66 +1,194 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { parseUnits } from 'viem';
 import { useListings, useInvestments, useStablecoin } from '@/hooks/useContract';
 import { formatTokenAmount, getCategoryIcon } from '@/lib/contracts';
+import { livestockManagerContract } from '@/lib/contracts';
 import toast from 'react-hot-toast';
 
+// Define proper TypeScript interface for listings
+interface Listing {
+  id: number;
+  tokenId?: number;
+  farmer: string;
+  livestockType: string;
+  totalShares: number;
+  availableShares: number;
+  pricePerShare: string;
+  category: string;
+  healthStatus?: string;
+  age?: number;
+  insuranceId?: string;
+  status?: 'pending' | 'verified' | string;
+  isVerified?: boolean;
+  createdAt?: string;
+  details?: {
+    healthStatus: string;
+    age?: number;
+    insuranceId?: string;
+  };
+}
+
 export default function Marketplace() {
-  const { listings, isLoading, refreshListings } = useListings();
-  const { investInListing } = useInvestments();
-  const { balance: stablecoinBalance, approve } = useStablecoin();
+  const { address, isConnected } = useAccount();
+  
+  // Safe hook usage with type assertion and fallbacks
+  const listingsHook = useListings();
+  const hookListings = (listingsHook?.listings || []) as Listing[];
+  const hookIsLoading = listingsHook?.isLoading || false;
+  const hookRefreshListings = listingsHook?.refreshListings || (() => {});
+  
+  // Safe destructuring - investInListing doesn't exist in useInvestments
+  const investmentsHook = useInvestments();
+  const refreshInvestments = investmentsHook?.refreshInvestments || (() => {});
+  
+  const stablecoinHook = useStablecoin();
+  const stablecoinBalance = stablecoinHook?.balance || '0';
+  const approve = stablecoinHook?.approve || (async () => ({ success: false }));
+  
+  // Wagmi hooks for investment functionality
+  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  
+  // Local state for listings with proper typing
+  const [listings, setListings] = useState<Listing[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [investmentAmount, setInvestmentAmount] = useState<string>('');
-  const [selectedListing, setSelectedListing] = useState<any>(null);
+  const [selectedListing, setSelectedListing] = useState<Listing | null>(null);
   const [showInvestModal, setShowInvestModal] = useState(false);
 
+  // Safe utility functions with fallbacks
+  const safeCategoryIcon = (category: string = 'Unknown') => {
+    try {
+      return getCategoryIcon(category);
+    } catch {
+      return '📦';
+    }
+  };
+
+  const safeFormatTokenAmount = (amount: any, decimals: number = 6) => {
+    try {
+      return formatTokenAmount(amount, decimals);
+    } catch {
+      return '0.00';
+    }
+  };
+
+  // Load listings from multiple sources
+  const loadListings = async () => {
+    setIsLoading(true);
+    try {
+      let listingsData: Listing[] = [];
+
+      // Try to get from hook first
+      if (hookListings && hookListings.length > 0) {
+        listingsData = hookListings;
+      } 
+      // Fallback to localStorage
+      else {
+        const storedAssets = localStorage.getItem('userAssets');
+        if (storedAssets) {
+          const allAssets: Listing[] = JSON.parse(storedAssets);
+          listingsData = allAssets.filter(asset => asset?.status === 'verified');
+        }
+      }
+
+      setListings(listingsData);
+    } catch (error) {
+      console.error('Error loading listings:', error);
+      toast.error('Failed to load marketplace listings');
+      setListings([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Refresh function
+  const refreshListings = async () => {
+    try {
+      await hookRefreshListings();
+      await loadListings();
+    } catch (error) {
+      console.error('Error refreshing listings:', error);
+      await loadListings(); // Fallback to local load
+    }
+  };
+
   useEffect(() => {
-    refreshListings();
-  }, [refreshListings]);
+    loadListings();
+  }, [hookListings]);
 
-  const filteredListings = listings?.filter(listing => 
-    selectedCategory === 'All' || listing.category === selectedCategory
-  ) || [];
+  // Handle successful investment transaction
+  useEffect(() => {
+    if (isSuccess && hash) {
+      toast.success(`✅ Investment confirmed! Hash: ${hash.slice(0, 10)}...`);
+      setShowInvestModal(false);
+      setInvestmentAmount('');
+      setSelectedListing(null);
+      refreshListings();
+      refreshInvestments();
+    }
+  }, [isSuccess, hash, refreshInvestments]);
 
+  // Safe filtering with type safety
+  const filteredListings = listings.filter(listing => {
+    const safeCategory = listing?.category || 'Unknown';
+    return selectedCategory === 'All' || safeCategory === selectedCategory;
+  });
+
+  // Implement investInListing using wagmi
   const handleInvest = async () => {
-    if (!selectedListing || !investmentAmount) return;
+    if (!selectedListing || !investmentAmount || !isConnected || !address) {
+      toast.error('Please connect your wallet and enter valid details');
+      return;
+    }
 
-    const shares = Math.floor(parseFloat(investmentAmount) / parseFloat(formatTokenAmount(selectedListing.pricePerShare, 6)));
+    const safePricePerShare = safeFormatTokenAmount(selectedListing.pricePerShare, 6);
+    const shares = Math.floor(parseFloat(investmentAmount) / parseFloat(safePricePerShare));
     
     if (shares <= 0) {
       toast.error('Invalid investment amount');
       return;
     }
 
-    if (shares > Number(selectedListing.availableShares)) {
+    const safeAvailableShares = Number(selectedListing.availableShares) || 0;
+    if (shares > safeAvailableShares) {
       toast.error('Not enough shares available');
       return;
     }
 
     try {
-      // First approve spending
-      await approve(selectedListing.farmer, investmentAmount);
-      
-      // Then invest
-      const result = await investInListing(
-        Number(selectedListing.tokenId),
-        shares,
-        formatTokenAmount(selectedListing.pricePerShare, 6)
-      );
+      toast.loading('Preparing investment transaction...');
 
-      if (result.success) {
-        toast.success('🎉 Investment successful!');
-        setShowInvestModal(false);
-        setInvestmentAmount('');
-        setSelectedListing(null);
-        refreshListings();
-      }
+      // Call the invest function on the contract
+      await writeContract({
+        address: '0x724550c719e4296B8B75C8143Ab6228141bC7747', // Your contract address
+        abi: livestockManagerContract.abi,
+        functionName: 'invest',
+        args: [
+          BigInt(selectedListing.tokenId || selectedListing.id),
+          BigInt(shares),
+          parseUnits(safePricePerShare, 6)
+        ],
+      });
+
+      toast.dismiss();
+      toast.success('🔄 Investment transaction sent to MetaMask!');
+
     } catch (error: any) {
-      toast.error(`Investment failed: ${error.message}`);
+      toast.dismiss();
+      if (error?.message?.includes('User rejected')) {
+        toast.error('Transaction rejected by user');
+      } else {
+        toast.error(`Investment failed: ${error?.message ?? 'Unknown error'}`);
+      }
     }
   };
 
-  if (isLoading) {
+  if (isLoading || hookIsLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
         <div className="animate-pulse space-y-4">
@@ -75,10 +203,19 @@ export default function Marketplace() {
     );
   }
 
+  if (!isConnected) {
+    return (
+      <div className="bg-white rounded-xl shadow-lg p-6 mb-6 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Connect Wallet to Access Marketplace</h2>
+        <p className="text-gray-600">Please connect your wallet to view and invest in agricultural assets</p>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Investment Marketplace</h2>
-      <p className="text-gray-600 mb-6">Discover agricultural investment opportunities</p>
+      <p className="text-gray-600 mb-6">Discover agricultural investment opportunities with MetaMask integration</p>
       
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -101,31 +238,40 @@ export default function Marketplace() {
       {filteredListings.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredListings.map((listing, index) => {
-            const fundedPercentage = ((Number(listing.totalShares) - Number(listing.availableShares)) / Number(listing.totalShares)) * 100;
+            // Safe property access with fallbacks
+            const safeLivestockType = listing?.livestockType || 'Unknown Asset';
+            const safeCategory = listing?.category || 'Unknown';
+            const safeTotalShares = Number(listing?.totalShares) || 0;
+            const safeAvailableShares = Number(listing?.availableShares) || 0;
+            const safePricePerShare = listing?.pricePerShare || '0';
+            const safeHealthStatus = listing?.details?.healthStatus || listing?.healthStatus || 'Good';
+            
+            const fundedPercentage = safeTotalShares > 0 ? ((safeTotalShares - safeAvailableShares) / safeTotalShares) * 100 : 0;
+            const formattedPrice = safeFormatTokenAmount(safePricePerShare, 6);
             
             return (
-              <div key={index} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+              <div key={listing?.id || index} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="text-3xl">{getCategoryIcon(listing.category)}</div>
+                    <div className="text-3xl">{safeCategoryIcon(safeCategory)}</div>
                     <div>
-                      <h3 className="font-bold text-lg text-gray-800">{listing.livestockType}</h3>
-                      <p className="text-sm text-gray-500">{listing.category}</p>
+                      <h3 className="font-bold text-lg text-gray-800">{safeLivestockType}</h3>
+                      <p className="text-sm text-gray-500">{safeCategory}</p>
                     </div>
                   </div>
 
                   <div className="space-y-3 mb-4">
                     <div className="flex justify-between text-sm">
                       <span>Price per Share:</span>
-                      <span className="font-semibold">{formatTokenAmount(listing.pricePerShare, 6)} TUSDC</span>
+                      <span className="font-semibold">{formattedPrice} TUSDC</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Available Shares:</span>
-                      <span className="font-semibold">{listing.availableShares.toString()}</span>
+                      <span className="font-semibold">{safeAvailableShares.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span>Health Status:</span>
-                      <span className="font-semibold text-green-600">{listing.details.healthStatus}</span>
+                      <span className="font-semibold text-green-600">{safeHealthStatus}</span>
                     </div>
                   </div>
 
@@ -161,7 +307,7 @@ export default function Marketplace() {
         <div className="text-center py-12">
           <div className="text-4xl mb-4">🔍</div>
           <h3 className="text-lg font-semibold text-gray-800 mb-2">No Investments Available</h3>
-          <p className="text-gray-600">Check back later for new investment opportunities.</p>
+          <p className="text-gray-600">Check back later for new investment opportunities or create assets in Farmer Dashboard.</p>
         </div>
       )}
 
@@ -169,16 +315,16 @@ export default function Marketplace() {
       {showInvestModal && selectedListing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl p-8 max-w-md w-full">
-            <h3 className="text-2xl font-bold mb-4">Invest in {selectedListing.livestockType}</h3>
+            <h3 className="text-2xl font-bold mb-4">Invest in {selectedListing.livestockType || 'Asset'}</h3>
             
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
               <div className="flex justify-between text-sm mb-2">
                 <span>Price per Share:</span>
-                <span className="font-semibold">{formatTokenAmount(selectedListing.pricePerShare, 6)} TUSDC</span>
+                <span className="font-semibold">{safeFormatTokenAmount(selectedListing.pricePerShare, 6)} TUSDC</span>
               </div>
               <div className="flex justify-between text-sm mb-2">
                 <span>Available Shares:</span>
-                <span className="font-semibold">{selectedListing.availableShares.toString()}</span>
+                <span className="font-semibold">{(selectedListing.availableShares || 0).toLocaleString()}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Your Balance:</span>
@@ -200,7 +346,7 @@ export default function Marketplace() {
               />
               {investmentAmount && (
                 <div className="mt-2 text-sm text-gray-600">
-                  Shares: {Math.floor(parseFloat(investmentAmount) / parseFloat(formatTokenAmount(selectedListing.pricePerShare, 6)))}
+                  Shares: {Math.floor(parseFloat(investmentAmount) / parseFloat(safeFormatTokenAmount(selectedListing.pricePerShare, 6)))}
                 </div>
               )}
             </div>
@@ -214,19 +360,34 @@ export default function Marketplace() {
               </button>
               <button
                 onClick={handleInvest}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                disabled={isPending || isConfirming}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-colors flex items-center justify-center gap-2"
               >
-                Confirm Investment
+                {isPending || isConfirming ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    {isPending ? 'Confirm in MetaMask...' : 'Processing...'}
+                  </>
+                ) : (
+                  'Confirm Investment'
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
       
-      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-        <p className="text-sm text-blue-800">
-          ✅ Live marketplace data from BlockDAG blockchain
-        </p>
+      {/* MetaMask Integration Notice */}
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+        <div className="flex items-center gap-3">
+          <span className="text-2xl">⚡</span>
+          <div>
+            <h4 className="font-bold text-blue-800">Real MetaMask Integration</h4>
+            <p className="text-sm text-blue-700">
+              All investments trigger REAL MetaMask popups for blockchain transactions on BlockDAG testnet
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

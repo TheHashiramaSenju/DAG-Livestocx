@@ -21,7 +21,8 @@
     "lint:fix": "next lint --fix",
     "type-check": "tsc --noEmit",
     "clean": "rm -rf .next out dist",
-    "analyze": "ANALYZE=true npm run build"
+    "analyze": "ANALYZE=true npm run build",
+    "deploy": "next build && next start" 
   },
   "dependencies": {
     "@tanstack/react-query": "^5.40.1",

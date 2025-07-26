@@ -38,7 +38,12 @@ export default function AdminDashboard({ onExit, onRoleSwitch }: AdminDashboardP
   const [activePanel, setActivePanel] = useState<'overview' | 'verification' | 'roles' | 'treasury' | 'analytics'>('overview');
 
   const { investWithMetaMask, isLoading } = useRealMetaMask();
-  const { assets, investments, refreshData } = useCrossDashboardData();
+  const { assets = [], investments = [], refreshData } = useCrossDashboardData() as { 
+  assets: Asset[]; 
+  investments: Investment[]; 
+  refreshData: () => void 
+  };
+
 
   const [mintAmount, setMintAmount] = useState<string>('10000');
 
@@ -502,7 +507,7 @@ export default function AdminDashboard({ onExit, onRoleSwitch }: AdminDashboardP
                     <div className="space-y-2">
                       <button
                         type="button"
-                        onClick={() => toast.info('⏸️ Platform paused!')}
+                        onClick={() => toast('⏸️ Platform paused!')}
                         className="w-full py-2 px-4 rounded-lg bg-yellow-600 hover:bg-yellow-700 text-white transition-colors"
                       >
                         ⏸️ Pause Platform

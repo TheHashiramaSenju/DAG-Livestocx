@@ -17,21 +17,22 @@ export const CONTRACT_ADDRESSES = {
   }
 } as const;
 
-// Contract 
+// ✅ FIX: The imported JSON is the ABI array itself. Remove the redundant .abi access.
 export const livestockManagerContract = {
   address: (chainId: number) => CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]?.livestockManager,
-  abi: LivestockManagerAbi.abi || LivestockManagerAbi,
+  abi: LivestockManagerAbi,
 } as const;
 
 export const testStablecoinContract = {
   address: (chainId: number) => CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]?.testStablecoin,
-  abi: TestStablecoinAbi.abi || TestStablecoinAbi,
+  abi: TestStablecoinAbi,
 } as const;
 
 export const livestockAssetNFTContract = {
   address: (chainId: number) => CONTRACT_ADDRESSES[chainId as keyof typeof CONTRACT_ADDRESSES]?.livestockAssetNFT,
-  abi: LivestockAssetNFTAbi.abi || LivestockAssetNFTAbi,
+  abi: LivestockAssetNFTAbi,
 } as const;
+// End of Fix
 
 export const ROLES = {
   DEFAULT_ADMIN_ROLE: '0x0000000000000000000000000000000000000000000000000000000000000000',

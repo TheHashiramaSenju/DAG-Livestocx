@@ -21,10 +21,11 @@ export default function InteractiveGlobe() {
     
     if (!globe || !container) return;
 
-    // Intersection Observer for visibility
+    // Intersection Observer for visibility - FIXED: Safe array destructuring
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[0];
+        if (entry && entry.isIntersecting) {
           setIsVisible(true);
         }
       },

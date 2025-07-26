@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAccount, useBalance, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import {
+  useAccount,
+  useBalance,
+  useConnect,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from 'wagmi';
 import { parseUnits } from 'viem';
 import { livestockManagerContract } from '@/lib/contracts';
 import toast from 'react-hot-toast';
@@ -36,16 +42,15 @@ interface Holding {
 export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDashboardProps) {
   const { address, isConnected } = useAccount();
   const { data: balance } = useBalance({ address });
+  const { connect, connectors } = useConnect();
   const [activePanel, setActivePanel] = useState<'marketplace' | 'portfolio' | 'analytics'>('marketplace');
 
-  // Wagmi hooks for contract interactions
-  const { writeContract, data: hash, isLoading: isPending } = useWriteContract();
+  // Wagmi hooks for contract interactions - FIXED: isPending instead of isLoading
+  const { writeContract, data: hash, isPending } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
 
   // Investment input state
   const [investmentAmount, setInvestmentAmount] = useState<string>('');
-  
-  // Selected asset for investment (optional, can be used to populate inputs)
   const [selectedAsset, setSelectedAsset] = useState<AssetItem | null>(null);
 
   // Sample Marketplace assets (hard-coded for demo, replace with live data)
@@ -67,7 +72,7 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
   ];
 
   // Handle investment transaction via MetaMask popup
-  const handleInvest = async (assetId: number, shares: number, pricePerShare: string) => {
+  const handleInvest = async (assetId: number, shares: number, pricePerShare: number) => {
     if (!isConnected || !address) {
       toast.error('Please connect your wallet first');
       return;
@@ -83,7 +88,7 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
         args: [
           BigInt(assetId),
           BigInt(shares),
-          parseUnits(pricePerShare, 6), // 6 decimals assumed
+          parseUnits(pricePerShare.toString(), 6), // 6 decimals assumed
         ],
       });
 
@@ -91,10 +96,10 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
       toast.success('🔄 Investment transaction sent to MetaMask!');
     } catch (error: any) {
       toast.dismiss();
-      if (error.message?.includes('User rejected')) {
+      if (error?.message?.includes('User rejected')) {
         toast.error('Investment cancelled by user');
       } else {
-        toast.error(`Investment failed: ${error.message}`);
+        toast.error(`Investment failed: ${error?.message ?? 'Unknown error'}`);
       }
     }
   };
@@ -123,7 +128,7 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
       toast.success('💰 Withdrawal transaction sent to MetaMask!');
     } catch (error: any) {
       toast.dismiss();
-      toast.error(`Withdrawal failed: ${error.message}`);
+      toast.error(`Withdrawal failed: ${error?.message ?? 'Unknown error'}`);
     }
   };
 
@@ -138,8 +143,19 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center text-white">
-          <h2 className="text-3xl font-bold mb-4">Connect Wallet for Investor Access</h2>
-          <w3m-button />
+          <h2 className="text-3xl font-bold mb-6">Connect Wallet for Investor Access</h2>
+          <div className="space-y-2">
+            {connectors.map((connector) => (
+              <button
+                key={connector.id}
+                onClick={() => connect({ connector })}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-xl mx-2 transition-colors"
+                type="button"
+              >
+                Connect with {connector.name}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -307,7 +323,7 @@ export default function InvestorDashboard({ onExit, onRoleSwitch }: InvestorDash
                         />
                         <button
                           type="button"
-                          onClick={() => handleInvest(asset.id, parseInt(investmentAmount) || 1, asset.pricePerShare.toString())}
+                          onClick={() => handleInvest(asset.id, parseInt(investmentAmount) || 1, asset.pricePerShare)}
                           disabled={isPending || isConfirming}
                           className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center gap-1"
                           aria-disabled={isPending || isConfirming}

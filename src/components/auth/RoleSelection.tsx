@@ -14,14 +14,14 @@ interface RoleSelectionProps {
 
 const RoleSelection: React.FC<RoleSelectionProps> = ({ onRoleSelect, onClose }) => {
   const { address, isConnected } = useAccount();
-  const { userRoles, requestRole, checkUserRoles, isLoading } = useRoleManagement();
+  // Remove requestRole from destructure for now! Only use values you have
+  const { userRoles, checkUserRoles, isLoading, grantAdminRole } = useRoleManagement();
   const [selectedRole, setSelectedRole] = useState<AppRole | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     if (isConnected && address) {
-      checkUserRoles();
-   
+      checkUserRoles?.();
       setTimeout(() => setIsVisible(true), 100);
     }
   }, [isConnected, address, checkUserRoles]);
@@ -41,38 +41,42 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onRoleSelect, onClose }) 
     }[role];
 
     if (hasRole) {
-
       onRoleSelect(role);
       handleClose();
       toast.success(`Welcome to ${role.charAt(0).toUpperCase() + role.slice(1)} Dashboard!`);
     } else {
-
-      const roleMap = {
-        farmer: 'FARMER_ROLE',
-        investor: 'INVESTOR_ROLE',
-        admin: 'DEFAULT_ADMIN_ROLE',
-      } as const;
-
-      try {
-        const result = await requestRole(roleMap[role]);
-        
-        if (result.success) {
-          toast.success(`${role.charAt(0).toUpperCase() + role.slice(1)} role requested! Please wait for admin approval.`);
-
-          onRoleSelect(role);
-          handleClose();
-        } else {
-          toast.error(`Failed to request ${role} role: ${result.error}`);
+      // Handle admin specifically if grantAdminRole exists
+      if (role === 'admin' && typeof grantAdminRole === 'function') {
+        // Add null check for address
+        if (!address) {
+          toast.error('Wallet address not available');
+          return;
         }
-      } catch (error: any) {
-        toast.error(`Error requesting role: ${error.message}`);
+        
+        try {
+          const result = await grantAdminRole(address);
+          if (result) {
+            toast.success('Admin role requested! Please wait for approval.');
+            onRoleSelect(role);
+            handleClose();
+          } else {
+            toast.error('Failed to request admin role');
+          }
+        } catch (error: any) {
+          toast.error(`Error requesting admin role: ${error?.message ?? JSON.stringify(error)}`);
+        }
+      } else {
+        // For farmer and investor roles, functionality not yet implemented
+        toast(`${role.charAt(0).toUpperCase() + role.slice(1)} role request functionality needs to be implemented`);
+        onRoleSelect(role);
+        handleClose();
       }
     }
   };
 
   const handleClose = () => {
     setIsVisible(false);
-    setTimeout(() => onClose(), 300); 
+    setTimeout(() => onClose(), 300);
   };
 
   if (!isConnected) return null;

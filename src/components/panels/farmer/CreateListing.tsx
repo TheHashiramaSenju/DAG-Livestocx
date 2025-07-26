@@ -1,14 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
+import { parseUnits } from 'viem';
 import { useListings, useStablecoin } from '@/hooks/useContract';
-import { validateListingData } from '@/lib/contracts';
-import { LivestockDetails } from '@/types';
+import { livestockManagerContract } from '@/lib/contracts';
 import toast from 'react-hot-toast';
 
 export default function CreateListing() {
-  const { createListing, isLoading } = useListings();
-  const { balance: stablecoinBalance } = useStablecoin();
+  const { address, isConnected } = useAccount();
+  
+  // Wagmi hooks for contract interaction
+  const { writeContract, data: hash, isPending } = useWriteContract();
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
+  
+  // Safe destructuring with fallbacks for existing hooks
+  const listingsHook = useListings();
+  const refreshListings = listingsHook?.refreshListings || (() => {});
+  
+  const stablecoinHook = useStablecoin();
+  const stablecoinBalance = stablecoinHook?.balance || '0';
   
   const [formData, setFormData] = useState({
     livestockType: '',
@@ -24,31 +35,80 @@ export default function CreateListing() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!isConnected || !address) {
+      toast.error('Please connect your wallet first');
+      return;
+    }
+    
     if (!formData.lastVaccinationDate) {
       toast.error('Please select a vaccination date');
       return;
     }
 
-    const details: LivestockDetails = {
-      healthStatus: formData.healthStatus,
-      age: BigInt(formData.age),
-      lastVaccinationDate: BigInt(Math.floor(new Date(formData.lastVaccinationDate).getTime() / 1000)),
-      insuranceId: formData.insuranceId,
-    };
+    try {
+      toast.loading('Preparing MetaMask transaction...');
 
-    console.log('Creating listing with data:', formData);
-    
-    // THIS WILL TRIGGER METAMASK POPUP
-    const result = await createListing(
-      formData.totalShares,
-      formData.pricePerShare,
-      formData.category,
-      formData.livestockType,
-      details
-    );
+      // Create livestock details array as expected by contract
+      const livestockDetails = [
+        formData.healthStatus,
+        BigInt(formData.age),
+        BigInt(Math.floor(new Date(formData.lastVaccinationDate).getTime() / 1000)),
+        formData.insuranceId,
+      ];
 
-    if (result.success) {
-      toast.success('🌾 Asset successfully tokenized!');
+      // Call contract directly using wagmi
+      await writeContract({
+        address: '0x724550c719e4296B8B75C8143Ab6228141bC7747', // Your contract address
+        abi: livestockManagerContract.abi,
+        functionName: 'createListing',
+        args: [
+          BigInt(formData.totalShares),
+          parseUnits(formData.pricePerShare, 6), // Assuming TUSDC has 6 decimals
+          formData.category,
+          formData.livestockType,
+          livestockDetails,
+        ],
+      });
+
+      toast.dismiss();
+      toast.success('🔄 Transaction submitted! Check MetaMask...');
+
+      // Save to localStorage for immediate UI update
+      const existingAssets = JSON.parse(localStorage.getItem('userAssets') || '[]');
+      const newAsset = {
+        id: Date.now(),
+        tokenId: 0,
+        farmer: address,
+        livestockType: formData.livestockType,
+        totalShares: formData.totalShares,
+        availableShares: formData.totalShares,
+        pricePerShare: formData.pricePerShare,
+        category: formData.category,
+        healthStatus: formData.healthStatus,
+        age: formData.age,
+        insuranceId: formData.insuranceId,
+        status: 'pending',
+        isVerified: false,
+        createdAt: new Date().toISOString(),
+        ...(hash && { txHash: hash }),
+      };
+      localStorage.setItem('userAssets', JSON.stringify([...existingAssets, newAsset]));
+
+    } catch (error: any) {
+      toast.dismiss();
+      if (error?.message?.includes('User rejected')) {
+        toast.error('Transaction rejected by user');
+      } else {
+        toast.error(`Transaction failed: ${error?.message ?? 'Unknown error'}`);
+      }
+    }
+  };
+
+  // Handle successful transaction
+  useEffect(() => {
+    if (isSuccess && hash) {
+      toast.success(`✅ Asset successfully tokenized! Hash: ${hash.slice(0, 10)}...`);
+      
       // Reset form
       setFormData({
         livestockType: '',
@@ -60,10 +120,20 @@ export default function CreateListing() {
         lastVaccinationDate: '',
         insuranceId: '',
       });
-    } else {
-      toast.error(`Failed to create listing: ${result.error}`);
+      
+      // Refresh listings
+      refreshListings();
     }
-  };
+  }, [isSuccess, hash, refreshListings]);
+
+  if (!isConnected) {
+    return (
+      <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Connect Wallet to Create Listing</h2>
+        <p className="text-gray-600">Please connect your wallet to create agricultural asset listings</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -189,17 +259,42 @@ export default function CreateListing() {
           </div>
         </div>
 
+        {/* Asset Summary */}
+        <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-6">
+          <h4 className="text-xl font-bold text-gray-800 mb-4">Asset Summary</h4>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div>
+              <div className="text-2xl font-bold text-green-600">
+                ${(formData.totalShares * parseFloat(formData.pricePerShare || '0')).toLocaleString()}
+              </div>
+              <div className="text-sm text-gray-600">Total Value (TUSDC)</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-blue-600">{formData.totalShares.toLocaleString()}</div>
+              <div className="text-sm text-gray-600">Total Shares</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-purple-600">${formData.pricePerShare}</div>
+              <div className="text-sm text-gray-600">Price/Share</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold text-orange-600">{formData.category}</div>
+              <div className="text-sm text-gray-600">Category</div>
+            </div>
+          </div>
+        </div>
+
         {/* Submit Button */}
         <div className="flex justify-center">
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isPending || isConfirming}
             className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-4 px-12 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-xl hover:shadow-2xl disabled:cursor-not-allowed flex items-center gap-3"
           >
-            {isLoading ? (
+            {isPending || isConfirming ? (
               <>
                 <div className="w-6 h-6 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                Creating Asset...
+                {isPending ? 'Confirm in MetaMask...' : 'Processing...'}
               </>
             ) : (
               <>
@@ -210,6 +305,17 @@ export default function CreateListing() {
           </button>
         </div>
       </form>
+
+      {/* MetaMask Integration Notice */}
+      <div className="mt-8 p-6 bg-green-50 rounded-2xl border-2 border-green-200">
+        <div className="flex items-center gap-3 mb-3">
+          <span className="text-2xl">⚡</span>
+          <h4 className="text-lg font-bold text-green-800">Real MetaMask Integration</h4>
+        </div>
+        <p className="text-green-700">
+          This will trigger a REAL MetaMask popup to create your asset on the BlockDAG blockchain!
+        </p>
+      </div>
     </div>
   );
 }

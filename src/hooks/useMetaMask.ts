@@ -5,6 +5,7 @@ import { useAccount, useConnect, useDisconnect, useWalletClient, useSwitchChain 
 import { injected } from 'wagmi/connectors';
 import toast from 'react-hot-toast';
 
+// Defines the shape of the MetaMask state object
 export interface MetaMaskState {
   isInstalled: boolean;
   isConnected: boolean;
@@ -15,6 +16,7 @@ export interface MetaMaskState {
   error: string | null;
 }
 
+// Defines the shape of the transaction state object
 export interface TransactionState {
   isLoading: boolean;
   hash: string | null;
@@ -22,6 +24,7 @@ export interface TransactionState {
   receipt: any | null;
 }
 
+// Main hook to manage MetaMask interactions
 export function useMetaMask() {
   const { address, isConnected, chain } = useAccount();
   const { connect, connectors, isPending } = useConnect();
@@ -46,12 +49,14 @@ export function useMetaMask() {
     receipt: null,
   });
 
-  // Check if MetaMask is installed
+  // Utility function to check if MetaMask extension is installed
   const isMetaMaskInstalled = useCallback(() => {
-    return typeof window !== 'undefined' && !!window.ethereum?.isMetaMask;
+    // The `window as any` cast is used here to bypass potential TypeScript errors
+    // if multiple libraries declare the `ethereum` property differently.
+    return typeof window !== 'undefined' && !!(window as any).ethereum?.isMetaMask;
   }, []);
 
-  // Initialize MetaMask state
+  // Effect to synchronize the hook's state with wagmi's state
   useEffect(() => {
     setMetaMaskState(prev => ({
       ...prev,
@@ -63,7 +68,7 @@ export function useMetaMask() {
     }));
   }, [isMetaMaskInstalled, isConnected, isPending, address, chain]);
 
-  // Connect to MetaMask
+  // Function to initiate a connection to MetaMask
   const connectMetaMask = useCallback(async () => {
     if (!isMetaMaskInstalled()) {
       toast.error('Please install MetaMask to continue');
@@ -94,7 +99,7 @@ export function useMetaMask() {
     }
   }, [isMetaMaskInstalled, connectors, connect]);
 
-  // Disconnect from MetaMask
+  // Function to disconnect the wallet
   const disconnectMetaMask = useCallback(() => {
     disconnect();
     setMetaMaskState(prev => ({
@@ -103,29 +108,34 @@ export function useMetaMask() {
       account: null,
       error: null,
     }));
-    toast.info('MetaMask disconnected');
+    toast('MetaMask disconnected');
   }, [disconnect]);
 
-  // Switch to BlockDAG network
+  // Function to switch to the custom BlockDAG network
   const switchToBlockDAG = useCallback(async () => {
+    const ethereum = (window as any).ethereum;
+    if (!ethereum) {
+        toast.error("MetaMask is not available.");
+        return false;
+    }
+
     try {
       if (switchChain) {
         await switchChain({ chainId: 1043 }); // BlockDAG chain ID
         toast.success('Switched to BlockDAG network!');
         return true;
       } else {
-        // Fallback to manual network switch
-        if (typeof window !== 'undefined' && window.ethereum) {
+        // Fallback for older wallets: manual network switch
           try {
-            await window.ethereum.request({
+            await ethereum.request({
               method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x413' }], // 1043 in hex
+              params: [{ chainId: '0x413' }], // 1043 in hexadecimal
             });
             return true;
           } catch (switchError: any) {
             if (switchError.code === 4902) {
-              // Network not added, try to add it
-              await window.ethereum.request({
+              // If the network is not added, prompt the user to add it
+              await ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [{
                   chainId: '0x413',
@@ -144,8 +154,6 @@ export function useMetaMask() {
             }
             throw switchError;
           }
-        }
-        return false;
       }
     } catch (error: any) {
       toast.error(`Failed to switch network: ${error.message}`);
@@ -153,7 +161,7 @@ export function useMetaMask() {
     }
   }, [switchChain]);
 
-  // Execute transaction with MetaMask popup
+  // A generic function to execute any transaction, showing a MetaMask popup
   const executeTransaction = useCallback(async (transaction: {
     to: string;
     data?: string;
@@ -183,7 +191,7 @@ export function useMetaMask() {
       const errorMessage = error.message || 'Transaction failed';
       setTransactionState(prev => ({ ...prev, error: errorMessage, isLoading: false }));
       
-      if (error.code === 4001) {
+      if ((error as any).code === 4001) {
         toast.error('Transaction rejected by user');
       } else {
         toast.error(`Transaction failed: ${errorMessage}`);
@@ -192,7 +200,7 @@ export function useMetaMask() {
     }
   }, [walletClient]);
 
-  // Approve token spending (triggers MetaMask popup)
+  // A specific implementation of executeTransaction for approving tokens
   const approveToken = useCallback(async (tokenAddress: string, spenderAddress: string, amount: string): Promise<boolean> => {
     if (!walletClient) {
       toast.error('Please connect MetaMask first');
@@ -202,13 +210,13 @@ export function useMetaMask() {
     try {
       setTransactionState(prev => ({ ...prev, isLoading: true }));
       
-      // ERC20 approve function signature
+      // Manually encode the 'approve' function call data
       const approveData = `0x095ea7b3${spenderAddress.slice(2).padStart(64, '0')}${BigInt(amount).toString(16).padStart(64, '0')}`;
       
       const txHash = await executeTransaction({
         to: tokenAddress,
         data: approveData,
-        gasLimit: '100000', // 100k gas limit
+        gasLimit: '100000', // Set a reasonable gas limit for an approval
       });
 
       if (txHash) {
@@ -224,17 +232,18 @@ export function useMetaMask() {
     }
   }, [walletClient, executeTransaction]);
 
- 
+  // Function to prompt the user to add a new token to their wallet
   const addTokenToWallet = useCallback(async (tokenData: {
     address: string;
     symbol: string;
     decimals: number;
     image?: string;
   }) => {
-    if (typeof window === 'undefined' || !window.ethereum) return false;
+    const ethereum = (window as any).ethereum;
+    if (!ethereum) return false;
     
     try {
-      await window.ethereum.request({
+      await ethereum.request({
         method: 'wallet_watchAsset',
         params: {
           type: 'ERC20',
@@ -248,11 +257,11 @@ export function useMetaMask() {
   }, []);
 
   return {
-    // State
+    // State objects
     metaMask: metaMaskState,
     transaction: transactionState,
     
-    // Actions
+    // Action functions
     connectMetaMask,
     disconnectMetaMask,
     switchToBlockDAG,
@@ -260,19 +269,11 @@ export function useMetaMask() {
     approveToken,
     addTokenToWallet,
     
-    // Utilities
+    // Derived boolean utilities
     isCorrectNetwork: chain?.id === 1043,
     isMetaMaskInstalled: isMetaMaskInstalled(),
   };
 }
 
-declare global {
-  interface Window {
-    ethereum?: {
-      isMetaMask?: boolean;
-      request: (args: { method: string; params?: any[] }) => Promise<any>;
-      on?: (event: string, callback: (...args: any[]) => void) => void;
-      removeListener?: (event: string, callback: (...args: any[]) => void) => void;
-    };
-  }
-}
+// ✅ FIX: The conflicting `declare global` block has been removed.
+// The types from the wagmi/viem libraries are sufficient.

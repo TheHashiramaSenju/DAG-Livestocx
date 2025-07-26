@@ -1,49 +1,35 @@
-'use client';
-
-import React from 'react';
+import React, { Component, ReactNode } from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
-  error?: Error;
+  error: Error | null;
 }
 
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  ErrorBoundaryState
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
+interface ErrorBoundaryProps {
+  children: ReactNode;
+}
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
-  }
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  override state: ErrorBoundaryState = {
+    hasError: false,
+    error: null,
+  };
 
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
+    this.setState({ hasError: true, error });
   }
 
-  render() {
+  override render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen bg-red-50 flex items-center justify-center">
-          <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-md">
-            <h2 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h2>
-            <p className="text-gray-600 mb-4">
-              {this.state.error?.message || 'An unexpected error occurred'}
-            </p>
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700"
-            >
-              Reload Page
-            </button>
-          </div>
+        <div className="min-h-screen flex flex-col justify-center items-center bg-red-50">
+          <h1 className="text-3xl font-bold mb-2 text-red-600">Something went wrong.</h1>
+          <p className="mb-4 text-gray-700">An unexpected error occurred in this application.</p>
+          <pre className="bg-red-100 border border-red-400 p-3 rounded text-sm text-red-800 max-w-xl whitespace-pre-wrap">{this.state.error?.message}</pre>
         </div>
       );
     }
-
     return this.props.children;
   }
 }

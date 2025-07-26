@@ -1,46 +1,42 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther, parseUnits } from 'viem';
+import { useAccount } from 'wagmi';
 import { 
-  useListings, 
-  useInvestments, 
-  useStablecoin, 
-  useRoleManagement, 
-  useFundsManagement 
-} from './useContract';
-import { LivestockDetails, ContractInteractionResult } from '@/types';
+  // This is the hook that contains the logic to call the smart contracts
+  useRealMetaMask, 
+} from './useContract'; // Assuming useContract.ts is the file name
+import { LivestockDetails, ContractInteractionResult } from '@/types'; // Assuming you have this types file
 import toast from 'react-hot-toast';
 
+// Defines the shape for tracking the state of a contract operation
 export interface ContractOperation {
   type: 'createListing' | 'invest' | 'approve' | 'claimFunds' | 'requestRole' | 'mint';
   status: 'idle' | 'pending' | 'success' | 'error';
-  txHash?: string;
+  txHash?: `0x${string}`;
   error?: string;
 }
 
 export function useContractInteraction() {
-  const { address, isConnected } = useAccount();
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { isConnected } = useAccount();
   
   const [operation, setOperation] = useState<ContractOperation>({
     type: 'createListing',
     status: 'idle',
   });
 
-  // Import all contract hooks
-  const { createListing, verifyListing } = useListings();
-  const { investInListing, withdrawInvestment } = useInvestments();
-  const { approve, mint, transfer } = useStablecoin();
-  const { requestRole, approveRole } = useRoleManagement();
-  const { claimFunds } = useFundsManagement();
-
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+  // Import the functions and state from the correct hook (useRealMetaMask)
+  // that handles writing to the contract.
+  const { 
+    createAssetWithMetaMask, 
+    investWithMetaMask,
+    isLoading,
+    isSuccess,
     hash,
-  });
-
-  // Create listing wrapper
+    error,
+  } = useRealMetaMask();
+  
+  // Create listing wrapper function
   const handleCreateListing = useCallback(async (
     totalShares: number,
     pricePerShare: string,
@@ -50,38 +46,42 @@ export function useContractInteraction() {
   ): Promise<ContractInteractionResult> => {
     setOperation({ type: 'createListing', status: 'pending' });
     
+    const assetData = { totalShares, pricePerShare, category, livestockType, ...details };
+    
     try {
-      const result = await createListing(totalShares, pricePerShare, category, livestockType, details);
+      const result = await createAssetWithMetaMask(assetData);
       
       if (result.success) {
+        const txHash = result.txHash as unknown as `0x${string}`;
         setOperation({ 
           type: 'createListing', 
           status: 'success', 
-          txHash: result.txHash 
+          txHash: txHash
         });
-        toast.success('🌾 Asset listing created successfully!');
+        // ✅ FIX: Manually construct the return object to match the promised type.
+        return { success: true, txHash };
       } else {
+        const errorMsg = result.error as string;
         setOperation({ 
           type: 'createListing', 
           status: 'error', 
-          error: result.error 
+          error: errorMsg
         });
-        toast.error(`Failed to create listing: ${result.error}`);
+        // ✅ FIX: Manually construct the return object to match the promised type.
+        return { success: false, error: errorMsg };
       }
-      
-      return result;
-    } catch (error: any) {
+    } catch (e: any) {
       setOperation({ 
         type: 'createListing', 
         status: 'error', 
-        error: error.message 
+        error: e.message 
       });
-      toast.error(`Transaction failed: ${error.message}`);
-      return { success: false, error: error.message };
+      toast.error(`Transaction failed: ${e.message}`);
+      return { success: false, error: e.message };
     }
-  }, [createListing]);
+  }, [createAssetWithMetaMask]);
 
-  // Invest wrapper
+  // Invest wrapper function
   const handleInvest = useCallback(async (
     listingId: number,
     shares: number,
@@ -90,47 +90,49 @@ export function useContractInteraction() {
     setOperation({ type: 'invest', status: 'pending' });
     
     try {
-      const result = await investInListing(listingId, shares, maxPricePerShare);
+      const result = await investWithMetaMask(listingId, shares, maxPricePerShare);
       
       if (result.success) {
+        const txHash = result.txHash as unknown as `0x${string}`;
         setOperation({ 
           type: 'invest', 
           status: 'success', 
-          txHash: result.txHash 
+          txHash: txHash
         });
-        toast.success('💰 Investment successful!');
+        // ✅ FIX: Manually construct the return object here as well.
+        return { success: true, txHash };
       } else {
+        const errorMsg = result.error as string;
         setOperation({ 
           type: 'invest', 
           status: 'error', 
-          error: result.error 
+          error: errorMsg
         });
-        toast.error(`Investment failed: ${result.error}`);
+        // ✅ FIX: Manually construct the return object here as well.
+        return { success: false, error: errorMsg };
       }
-      
-      return result;
-    } catch (error: any) {
+    } catch (e: any) {
       setOperation({ 
         type: 'invest', 
         status: 'error', 
-        error: error.message 
+        error: e.message 
       });
-      toast.error(`Investment failed: ${error.message}`);
-      return { success: false, error: error.message };
+      toast.error(`Investment failed: ${e.message}`);
+      return { success: false, error: e.message };
     }
-  }, [investInListing]);
+  }, [investWithMetaMask]);
 
   return {
     operation,
     isConnected,
     
-    // Contract operations
+    // Expose the wrapped contract operations with consistent naming
     createListing: handleCreateListing,
     invest: handleInvest,
     
-    // Transaction state
-    isPending: isPending || isConfirming,
-    isConfirmed,
+    // Expose the transaction state from the underlying useRealMetaMask hook
+    isPending: isLoading,
+    isConfirmed: isSuccess,
     txHash: hash,
     error: error?.message,
   };
