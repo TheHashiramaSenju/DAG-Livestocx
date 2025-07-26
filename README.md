@@ -1,15 +1,15 @@
 # About Us
 
-## LivestocX 🌾 | Revolutionizing Agriculture Through Blockchain
+## LivestocX 🌾 | Revolutionizing LiveStock Assets Through BlockDAG
 
 ![Built on BlockDAG](https://img.shields.io/badge/Built%20on-BlockDAG-blue.svg?style=for-the-badge\&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjggMTI4Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMEMyOC43IDAgMCAyOC43IDAgNjRzMjguNyA2NCA2NCA2NCA2NC0yOC43IDY0LTY0UzEwMC4zIDAgNjQgMHptMCAxMTguNkMyNC4zIDExOC42IDkuNCAxMDMuNyA5LjQgNjRTMjQuMyA5LjQgNjQgOS40czU0LjYgMTQuOSA1NC42IDU0LjYtNDQuOSA1NC42LTU0LjYgNTQuNnoiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNjQgMTUuN2MtMjYuNyAwLTQ4LjMgMjEuNi00OC4zIDQ4LjNzMjEuNiA0OC4zIDQ4LjMgNDguMyA0OC4zLTIxLjYgNDguMy00OC4zLTIxLjYtNDguMy00OC4zLTQ4LjN6bTAgODQuOWMtMjAuMiAwLTM2LjYtMTYuNC0zNi46LTM2LjZzMTYuNC0zNi42IDM2LjYtMzYuNiAzNi42IDE2LjQgMzYuNiAzNi42LTE2LjQgMzYuNi0zNi42IDM2LjZ6Ii8+PC9zdmc+) ![License MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge) ![Version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blueviolet.svg?style=for-the-badge)
 
 
 
 
-**The World's First Decentralized Agricultural Asset Tokenization Platform**
+**The World's First Decentralized LiveStock Assets Asset Tokenization Platform**
 
-_Empowering farmers, connecting investors, transforming agriculture_
+_Empowering farmers, connecting investors, transforming LiveStock Assets_
 
 [🚀 **Live Demo**](https://livestocx-demo.vercel.app) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
 
@@ -17,22 +17,22 @@ _Empowering farmers, connecting investors, transforming agriculture_
 
 ### 🌟 Project Overview
 
-**LivestocX** is a groundbreaking blockchain-based platform that revolutionizes agricultural finance by enabling farmers to tokenize their livestock, crops, and agricultural assets, while connecting them with global investors seeking exposure to the agricultural sector.
+**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock, crops, and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
 
-Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in agricultural financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in agriculture.
+Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in LiveStock Assets financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in LiveStock Assets.
 
 #### 🎯 Core Purpose
 
-* **Democratize Agricultural Investment** - Make agriculture accessible to global investors
-* **Empower Farmers** - Provide instant liquidity for agricultural assets
-* **Ensure Transparency** - Blockchain-based verification and tracking
+* **Democratize LiveStock Assets Investment** - Make LiveStock Assets accessible to global investors
+* **Empower Farmers** - Provide instant liquidity for LiveStock Assets assets
+* **Ensure Transparency** - BlockDAG-based verification and tracking
 * **Create Economic Inclusion** - Bridge rural farmers with urban capital
 
 ### 🎯 What Makes LivestocX Special
 
-#### 🔥 **Real Blockchain Integration**
+#### 🔥 **Real BlockDAG Integration**
 
-Unlike demo projects, LivestocX features **actual MetaMask popups** and **real blockchain transactions** on the BlockDAG network.
+Unlike demo projects, LivestocX features **actual MetaMask popups** and **real BlockDAG transactions** on the BlockDAG network.
 
 #### 🔄 **Cross-Dashboard Synchronization**
 
@@ -92,17 +92,17 @@ Real-time platform metrics, investment tracking, and performance analytics acros
 
 ### 👥 The Team
 
-**Built by passionate blockchain developers during BlockDAG Hackathon 2025**
+**Built by passionate BlockDAG developers specializing in BlockDAG technology during BlockDAG Hackathon 2025**
 
-* **Mukesh T** - Front-end integrations and Contracts
-* **Vignesh K** - Research and analysis of Blockchain Networks
+* **Mukesh T** - Front-end integrations, Smart contracts and Advanced wallet configurations
+* **Vignesh K** - Research and analysis of BlockDAG and BlockDAG Networks
 * **Pravin** - Bug fixes and code review for crucial areas
 * **Darshan Venkataramanan** - Smart contract Integrations with Front end and wallet management
-* **Pooja Sri** - Distributed systems and Blockchain expert (SME)
+* **Pooja Sri** - Distributed systems and BlockDAG expert (SME)
 
 #### What We Did As A Team
 
-As a cohesive unit, we tackled this project from all angles. Our collective efforts involved in-depth research of blockchain networks, architecting and developing secure smart contracts, and building a responsive, user-friendly front-end. We integrated all components seamlessly, managed wallet connections, and rigorously tested for bugs to deliver a polished, end-to-end platform. Every line of code and design choice was a product of our collaborative synergy during the BlockDAG Hackathon 2025.
+As a cohesive unit, we tackled this project from all angles. Our collective efforts involved in-depth research of BlockDAG networks, architecting and developing secure smart contracts, and building a responsive, user-friendly front-end. We integrated all components seamlessly, managed wallet connections, and rigorously tested for bugs to deliver a polished, end-to-end platform. Every line of code and design choice was a product of our collaborative synergy during the BlockDAG Hackathon 2025.
 
 ***
 
@@ -132,14 +132,14 @@ copies or substantial portions of the Software.
 
 #### Real-World Impact
 
-* **Addresses $2.5 trillion agricultural financing gap globally**
+* **Addresses $2.5 trillion LiveStock Assets financing gap globally**
 * **Enables financial inclusion for 570M smallholder farmers worldwide**
 * **Creates a new asset class for institutional investors**
 
 #### Technical Excellence
 
 * **Production-ready codebase with professional architecture**
-* **Real blockchain integration, not simulated transactions**
+* **Real BlockDAG integration, not simulated transactions**
 * **Scalable smart contract design with upgrade capabilities**
 
 ### Acknowledgments
