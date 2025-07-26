@@ -15,7 +15,7 @@ _Empowering farmers, connecting investors, transforming LiveStock Assets_
 
 
 
-[🚀 **Live Demo**](https://livestocx-demo.vercel.app) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
+[🚀 **Live Demo**](https://blockdag-livestocx.vercel.app/) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
 
 ***
 
