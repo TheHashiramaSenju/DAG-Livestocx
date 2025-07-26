@@ -158,6 +158,6 @@ copies or substantial portions of the Software.
 
 ### Acknowledgments
 
-We thank Our Almighty god mother and Our beloved families for the support and love throughout this journey.
+We thank Our Almighty god mother and Our beloved families from up and above for the support and love throughout this journey.
 
 We extend our heartfelt thanks to the organizers of the **BlockDAG Hackathon 2025** for providing this incredible opportunity. Our project stands on the shoulders of giants, and we are grateful to the open-source community, especially the teams behind **Next.js, Hardhat, OpenZeppelin, and wagmi**.
