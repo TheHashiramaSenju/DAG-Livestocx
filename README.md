@@ -110,7 +110,7 @@ Real-time platform metrics, investment tracking, and performance analytics acros
 * **Vignesh K** - Research and analysis of BlockDAG and BlockDAG Networks
 * **Pravin** - Bug fixes and code review for crucial areas
 * **Darshan Venkataramanan** - Smart contract Integrations with Front end and wallet management
-* **Pooja Sri** - Distributed systems and BlockDAG expert (SME)
+* **Pooja Sri** - Distributed systems and Blockchain expert (SME)
 
 #### What We Did As A Team
 
