@@ -8,13 +8,13 @@
 
 _Empowering farmers, connecting investors, transforming LiveStock Assets_
 
-[🚀 **Live Demo**](https://blockdag-livestocx.vercel.app/) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
+[🚀 **Live Demo**](https://blockdag-livestocx.vercel.app/) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) &#x20;
 
 ***
 
 ### 🌟 Project Overview
 
-**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
+**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes Cattle finances for now and in-future LiveStock Assets finance by enabling farmers to tokenize their livestock and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
 
 Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in LiveStock Assets financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in LiveStock Assets.
 
@@ -23,7 +23,7 @@ Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical g
 
 **LivestocX** is a groundbreaking blockchain-based platform that revolutionizes Livestock asset finance by enabling farmers to tokenize their livestock and Livestock assets, while connecting them with global investors seeking exposure to the agricultural sector.
 
-Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in Livestock financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in Livestock Assets.
+Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in  Cattle and Livestock & lifestock asset financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in Livestock Assets.
 
 #### 🎯 Core Purpose
 
