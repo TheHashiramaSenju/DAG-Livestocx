@@ -15,29 +15,23 @@ _Empowering farmers, connecting investors, transforming LiveStock Assets_
 
 
 
-[🚀 **Live Demo**](https://blockdag-livestocx.vercel.app/) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](http://www.youtube.com/watch?v=S0AVNJ8Oi6c)
+[🚀 **Live Demo**](https://blockdag-livestocx.vercel.app/) | [📖 **Documentation**](https://livestocx.gitbook.io/livestocxdocumentation/) | [🎥 **Video Demo**](https://vimeo.com/1103547640?share=copy)
 
 ***
 
 ### 🌟 Project Overview
 
 
-**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock, crops, and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
+**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
 
 Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in LiveStock Assets financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in LiveStock Assets.
 
-* **Democratize LiveStock Assets Investment** - Make LiveStock Assets accessible to global investors
-* **Empower Farmers** - Provide instant liquidity for LiveStock Assets assets
-
-**LivestocX** is a groundbreaking blockchain-based platform that revolutionizes Livestock asset finance by enabling farmers to tokenize their livestock, crops, and Livestock assets, while connecting them with global investors seeking exposure to the agricultural sector.
-
-Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in Livestock financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in Livestock Assets.
 
 #### 🎯 Core Purpose
 
 * **Democratize Livestock Asset Investment** - Make Livestock accessible to global investors
 * **Empower Farmers** - Provide instant liquidity for Livestock assets
-* **Ensure Transparency** - Blockchain-based verification and tracking
+* **Ensure Transparency** - Blockchain DAG -based verification and tracking
 * **Create Economic Inclusion** - Bridge rural farmers with urban capital
 
 ### 🎯 What Makes LivestocX Special
