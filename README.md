@@ -18,7 +18,7 @@ _Empowering farmers, connecting investors, transforming LiveStock Assets_
 
 
 
-**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock and LiveStock Assets assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
+**LivestocX** is a groundbreaking BlockDAG-based platform that revolutionizes LiveStock Assets finance by enabling farmers to tokenize their livestock and LiveStock Assets, while connecting them with global investors seeking exposure to the LiveStock Assets sector.
 
 Built during the **BlockDAG Hackathon 2025**, LivestocX addresses the critical gap in LiveStock Assets financing where traditional farmers struggle to access capital, while investors lack transparent, secure ways to invest in LiveStock Assets.
 
